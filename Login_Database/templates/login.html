@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>StudyEasy</title>
+    <style>
+        .hidden { display: none; }
+        .message {
+            margin-top: 10px;
+            font-size: 14px;
+            color: red;
+        }
+        .success {
+            color: green;
+        }
+    </style>
+    <script>
+        async function login(event) {
+            event.preventDefault(); // Prevent page reload
+
+            const username = document.getElementById("username").value;
+            const password = document.getElementById("password").value;
+            const messageBox = document.getElementById("message");
+
+            if (!username || !password) {
+                messageBox.textContent = "Please enter both username and password.";
+                messageBox.className = "message";
+                return;
+            }
+
+            const response = await fetch("/login", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ username, password })
+            });
+
+            const result = await response.json();
+
+            if (response.status === 200) {
+                messageBox.textContent = "Login successful! Redirecting...";
+                messageBox.className = "message success";
+                setTimeout(() => { window.location.href = "/dashboard"; }, 1500);
+            } else {
+                messageBox.textContent = "Invalid username or password.";
+                messageBox.className = "message";
+            }
+        }
+
+        async function signup(event) {
+            event.preventDefault(); // Prevent page reload
+
+            const username = document.getElementById("username").value;
+            const password = document.getElementById("password").value;
+            const messageBox = document.getElementById("message");
+
+            if (!username || !password) {
+                messageBox.textContent = "Please enter both username and password.";
+                messageBox.className = "message";
+                return;
+            }
+
+            const response = await fetch("/signup", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ username, password })
+            });
+
+            const result = await response.json();
+
+            if (response.status === 201) {
+                messageBox.textContent = "Account created successfully! You can now log in.";
+                messageBox.className = "message success";
+            } else if (response.status === 409) {
+                messageBox.textContent = "Username already exists. Try another.";
+                messageBox.className = "message";
+            }
+        }
+    </script>
+</head>
+<body>
+    <div class="wrapper">
+        <form id="auth-form">
+            <h1>StudyEasy</h1>
+            <div class="input-box">
+                <label>
+                    <input type="text" id="username" placeholder="Username" required>
+                </label>
+            </div>
+            <div class="input-box">
+                <label>
+                    <input type="password" id="password" placeholder="Password" required>
+                </label>
+            </div>
+            <div class="remember-forgot">
+                <label><input type="checkbox"> Remember me</label>
+                <a href="#">Forgot password?</a>
+            </div>
+
+            <button type="submit" class="btn" onclick="login(event)">Login</button>
+            <p id="message" class="message hidden"></p> <!-- Inline message will appear here -->
+
+            <div class="registration">
+                <p>Don't have an account? <a href="#" onclick="signup(event)">Register</a></p>
+            </div>
+        </form>
+    </div>
+</body>
+</html>
