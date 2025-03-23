@@ -1,0 +1,57 @@
+<html>
+<head>
+    <script src="https://cdn.tiny.cloud/1/aamtrkram5lkjf2evqfsonvblo236ob4j4118v6mud5si86s/tinymce/7/tinymce.min.js" referrerpolicy="origin"></script>
+    <meta charset="UTF-8">
+    <title>My Test Page</title>
+      <script>
+      tinymce.init({
+        selector: 'textarea#myTextarea',
+        // Supposed to be additional editing features, don't think they'll work once free tiral runs out/don't seem to be necessary, will likely remove later
+        plugins: [
+      // Core editing features
+          'anchor', 'autolink', 'charmap', 'codesample', 'emoticons', 'image', 'link', 'lists', 'media', 'searchreplace', 'table', 'visualblocks', 'wordcount',
+      // Your account includes a free trial of TinyMCE premium features
+      // Try the most popular premium features until Mar 30, 2025:
+          'checklist', 'mediaembed', 'casechange', 'export', 'formatpainter', 'pageembed', 'a11ychecker', 'tinymcespellchecker', 'permanentpen', 'powerpaste', 'advtable', 'advcode', 'editimage', 'advtemplate', 'ai', 'mentions', 'tinycomments', 'tableofcontents', 'footnotes', 'mergetags', 'autocorrect', 'typography', 'inlinecss', 'markdown','importword', 'exportword', 'exportpdf'
+        ],
+        toolbar: 'undo redo | blocks fontfamily fontsize | bold italic underline strikethrough | link image media table mergetags | addcomment showcomments | spellcheckdialog a11ycheck typography | align lineheight | checklist numlist bullist indent outdent | emoticons charmap | removeformat',
+        tinycomments_mode: 'embedded',
+        tinycomments_author: 'Author name',
+        mergetags_list: [
+          { value: 'First.Name', title: 'First Name' },
+          { value: 'Email', title: 'Email' },
+        ],
+        ai_request: (request, respondWith) => respondWith.string(() => Promise.reject('See docs to implement AI Assistant')),
+      });
+    </script>
+</head>
+<body>
+    <!-- Your content goes here -->
+	<h1>Testing, Testing</h1>
+  <form method = "post" action = "/submit">
+    // The title of the document, will use this to search for specific documents 
+    <label for="docname">Document Title :</label>
+    <input type="text" id = "docname" name = "docname">
+    // The text box where the user can write their notes
+    <textarea id="myTextarea" rows="10" cols="80" name = "myTextarea"></textarea>
+    // This submit button will send the notes and the notes' title to the MongoDB database
+    <button type = "submit">Submit</button>
+  </form>
+        
+  // Allows the page to locally save and load text. May cut if unnecessary/replace with auto-save functionality if I can
+	<p>This is a paragraph. Howdy.</p>
+     <button onclick="mySave()">Save</button>
+     <button onclick="myLoad()">Load</button>
+    <script>
+     function mySave() {
+       var myContent = document.getElementById("myTextarea").value;
+       localStorage.setItem("myContent", myContent);
+     }
+     function myLoad() {
+       var myContent = localStorage.getItem("myContent");
+       document.getElementById("myTextarea").value = myContent;
+     }
+    </script>
+
+</body>
+</html>
