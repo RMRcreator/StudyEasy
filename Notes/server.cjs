@@ -9,7 +9,8 @@ app.use(express.static(__dirname));
 app.use(express.urlencoded({extended:true}))
 
 //Connects to our mongoDB database, will state connection success in the console
-mongoose.connect("mongodb+srv://dbRR:studyeasier11@secluster.q8vik.mongodb.net/")
+//For security, use your own username and password to the database here, ask me for it if you need to- RR
+mongoose.connect("mongodb+srv://<usernamehere>:<passwordhere>@secluster.q8vik.mongodb.net/")
 const db = mongoose.connection
 db.once('open',()=>{
     console.log("Mongodb connection: successful")
