@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Welcome Page</title>
+</head>
+
+<body>
+<div class="container">
+  <h1>Welcome to StudyEasy!</h1>
+  <h2> Upload your notes (PDFs only) </h2>
+  <input type="file" name="file" accept=".pdf, .docx">
+</div>
+
+<script src="{{ url_for('static', filename='studyeasy.js') }}" defer></script>
+</body>
+</html>

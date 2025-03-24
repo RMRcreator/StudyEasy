@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, jsonify
+from flask import Flask, render_template, request, jsonify, redirect, url_for
 from flask_bcrypt import Bcrypt
 import sqlite3
 
@@ -15,7 +15,7 @@ def create_table():
     cur = conn.cursor()
     cur.execute("""
     CREATE TABLE IF NOT EXISTS userdata (
-        id INTEGER PRIMARY KEY, 
+        id INTEGER PRIMARY KEY,
         username TEXT NOT NULL UNIQUE,
         password TEXT NOT NULL
     )
@@ -23,7 +23,7 @@ def create_table():
     conn.commit()
     conn.close()
 
-@app.route("/", methods=["GET"])
+@app.route("/")
 def home():
     return render_template("login.html")
 
@@ -61,11 +61,17 @@ def login():
 
     cur.execute("SELECT * FROM userdata WHERE username = ?", (username,))
     user = cur.fetchone()
+    conn.close()
 
-    if user and bcrypt.check_password_hash(user["password"], password):
-        return jsonify({"message": "Login successful"}), 200
+    if user and bcrypt.check_password_hash(user[2], password):
+        return jsonify({"message": "Login successful", "redirect": url_for('welcome')}), 200
     else:
         return jsonify({"message": "Invalid username or password"}), 401
+
+
+@app.route("/dashboard")
+def welcome():
+    return render_template("welcome.html")
 
 if __name__ == "__main__":
     create_table()
