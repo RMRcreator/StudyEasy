@@ -37,12 +37,32 @@
     // This submit button will send the notes and the notes' title to the MongoDB database
     <button type = "submit">Submit</button>
   </form>
-        
+     
+
+
   // Allows the page to locally save and load text. May cut if unnecessary/replace with auto-save functionality if I can
 	<p>This is a paragraph. Howdy.</p>
      <button onclick="mySave()">Save</button>
      <button onclick="myLoad()">Load</button>
+     <button id="quiz">Quiz</button>
     <script>
+      
+      const quizBtn = document.getElementById('quiz')
+      const textArea = document.getElementById('myTextarea')
+
+      const baseURL = 'http://localhost:3333/trial'
+      quizBtn.addEventListener('click',getInfo)
+      async function getInfo(e) {
+        e.preventDefault()
+        const res = await fetch(baseURL,
+          {
+            method: 'GET'
+          }
+        )
+        console.log(res)
+        const data = await res.json()
+        textArea.value = data.info
+      }
      function mySave() {
        var myContent = document.getElementById("myTextarea").value;
        localStorage.setItem("myContent", myContent);

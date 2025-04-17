@@ -42,6 +42,18 @@ res.send("Notes saved to database")
 })
 
 
+//Loads the document with the name entered by the user into the text editor, where it can be edited.
+//Currently working on receiving a doc name as imput from the web page.
+//Need to work on handling the user searching for documents that don't exist in the doc later
+app.get('/trial', async (req,res)=>{
+    const projection = { _id: 0, docname: 0, myTextarea: 1}
+    var textdoc = await Notes.collection.findOne({'docname' : 'Rally'}, projection)
+    var testing = (textdoc.myTextarea)
+    console.log(testing)
+    console.log(textdoc)
+    res.status(200).json({info: testing})
+})
+
 
 app.listen(port,()=>{
     console.log("Server started")
