@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Quiz Summary</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='login.css') }}">
+    <style>
+        body {
+            background-color: #f0f2f5;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            font-family: Arial, sans-serif;
+        }
+        .container {
+            background: white;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 0 15px rgba(0,0,0,0.1);
+            max-width: 600px;
+            width: 100%;
+        }
+        h1 {
+            text-align: center;
+            color: #333;
+        }
+        .qa {
+            margin-top: 15px;
+            padding: 15px;
+            background-color: #f9f9f9;
+            border-radius: 6px;
+        }
+        .qa strong {
+            color: #222;
+        }
+        .actions {
+            text-align: center;
+            margin-top: 30px;
+        }
+        .actions a {
+            display: inline-block;
+            margin: 10px;
+        }
+        .actions a button {
+            padding: 10px 20px;
+            background-color: #4285f4;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+        }
+        .actions a button:hover {
+            background-color: #3367d6;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Your Practice Quiz</h1>
+        {% for question, answer in quiz %}
+            <div class="qa">
+                <strong>Q:</strong> {{ question }}<br>
+                <strong>A:</strong> {{ answer }}
+            </div>
+        {% endfor %}
+        <div class="actions">
+            <a href="/create_quiz"><button>Create Another Quiz</button></a>
+            <a href="/dashboard"><button>Go Back to Home</button></a>
+        </div>
+    </div>
+</body>
+</html>

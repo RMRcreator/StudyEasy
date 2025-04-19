@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Create Practice Quiz</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='login.css') }}">
+    <style>
+        body {
+            background-color: #f0f2f5;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            font-family: Arial, sans-serif;
+        }
+        .container {
+            background: white;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 0 15px rgba(0,0,0,0.1);
+            width: 100%;
+            max-width: 600px;
+        }
+        h1 {
+            text-align: center;
+            color: #333;
+        }
+        label {
+            display: block;
+            margin-top: 15px;
+            color: #555;
+        }
+        input[type="text"] {
+            width: 100%;
+            padding: 8px;
+            margin-top: 5px;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+        }
+        button {
+            margin-top: 20px;
+            padding: 10px 20px;
+            background-color: #4285f4;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #3367d6;
+        }
+        .actions {
+            margin-top: 20px;
+            text-align: center;
+        }
+        .actions a button {
+            margin: 0 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Create a Practice Quiz</h1>
+        <form action="/submit_quiz" method="post">
+            <div id="quiz-container">
+                <div class="question-block">
+                    <label>Question 1:</label>
+                    <input type="text" name="question1" required>
+                    <label>Answer 1:</label>
+                    <input type="text" name="answer1" required>
+                </div>
+            </div>
+            <button type="button" onclick="addQuestion()">Add Another Question</button><br>
+            <button type="submit">Submit Quiz</button>
+        </form>
+        <div class="actions">
+            <a href="/dashboard"><button>Go Back to Home</button></a>
+        </div>
+    </div>
+
+    <script>
+    let questionCount = 1;
+    function addQuestion() {
+        questionCount++;
+        const container = document.getElementById('quiz-container');
+        const block = document.createElement('div');
+        block.className = 'question-block';
+        block.innerHTML = `
+            <label>Question ${questionCount}:</label>
+            <input type="text" name="question${questionCount}" required>
+            <label>Answer ${questionCount}:</label>
+            <input type="text" name="answer${questionCount}" required>
+        `;
+        container.appendChild(block);
+    }
+    </script>
+</body>
+</html>

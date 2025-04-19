@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Welcome to StudyEasy</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='login.css') }}">
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background: #f0f2f5;
+            font-family: Arial, sans-serif;
+        }
+        .container {
+            background-color: white;
+            padding: 40px;
+            border-radius: 10px;
+            box-shadow: 0px 0px 15px rgba(0,0,0,0.1);
+            width: 100%;
+            max-width: 500px;
+            text-align: center;
+        }
+        h1, h2 {
+            color: #333;
+        }
+        input[type="file"] {
+            margin: 20px 0;
+        }
+        .button-group {
+            margin-top: 30px;
+        }
+        .button-group a button {
+            margin: 10px;
+            padding: 10px 20px;
+            font-size: 16px;
+            border: none;
+            border-radius: 6px;
+            background-color: #4285f4;
+            color: white;
+            cursor: pointer;
+        }
+        .button-group a button:hover {
+            background-color: #3367d6;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Welcome to StudyEasy!</h1>
+        <h2>Upload your notes (PDFs only)</h2>
+        <input type="file" name="file" accept=".pdf, .docx">
+        
+        <div class="button-group">
+            <a href="/create_quiz"><button>Create Practice Quiz</button></a>
+        </div>
+    </div>
+
+    <script src="{{ url_for('static', filename='studyeasy.js') }}" defer></script>
+</body>
+</html>
