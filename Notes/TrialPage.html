@@ -23,34 +23,61 @@
         ],
         ai_request: (request, respondWith) => respondWith.string(() => Promise.reject('See docs to implement AI Assistant')),
       });
+    
     </script>
 </head>
 <body>
     <!-- Your content goes here -->
-	<h1>Testing, Testing</h1>
+	<h1>StudyEasy Notes</h1>
   <form method = "post" action = "/submit">
-    // The title of the document, will use this to search for specific documents 
+    <p>Type below to name your document before saving it.</p>
     <label for="docname">Document Title :</label>
     <input type="text" id = "docname" name = "docname">
-    // The text box where the user can write their notes
     <textarea id="myTextarea" rows="10" cols="80" name = "myTextarea"></textarea>
-    // This submit button will send the notes and the notes' title to the MongoDB database
     <button type = "submit">Submit</button>
   </form>
-        
-  // Allows the page to locally save and load text. May cut if unnecessary/replace with auto-save functionality if I can
-	<p>This is a paragraph. Howdy.</p>
-     <button onclick="mySave()">Save</button>
-     <button onclick="myLoad()">Load</button>
+     
+  <form method="post" action="/obtain">
+    <p>Type the name of the document you wish to load below.</p>
+    <label for="loadname">Load Document: </label>
+    <input type="text" id="loadname" name="loadname">
+  </form>
+
+
+	<p></p>
+    
+     <button id="load">Load</button>
+     
     <script>
-     function mySave() {
-       var myContent = document.getElementById("myTextarea").value;
-       localStorage.setItem("myContent", myContent);
-     }
-     function myLoad() {
-       var myContent = localStorage.getItem("myContent");
-       document.getElementById("myTextarea").value = myContent;
-     }
+      
+      const loadBtn = document.getElementById('load')
+      const textArea = document.getElementById('myTextarea')
+      const nameload = document.getElementById('loadname')
+
+      const baseURL = 'http://localhost:3333/trial'
+ 
+      loadBtn.addEventListener('click',getInfo)
+      async function getInfo(e) {
+        e.preventDefault()
+        if(nameload.value == '') {return }
+        const params = ({
+          key : nameload.value.toString()
+        })
+        const newURL = baseURL + 'Basis?'+new URLSearchParams(params).toString()
+        //newURL.search = new URLSearchParams(params).toString()
+        //textArea.value = newURL.toString()
+        console.log(newURL)
+        const res = await fetch(newURL,
+          {
+            method: 'GET'
+          }
+        )
+        console.log(res)
+        const data = await res.json()
+        textArea.value = data.info
+      }
+
+
     </script>
 
 </body>
