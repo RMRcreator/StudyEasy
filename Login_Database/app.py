@@ -75,6 +75,7 @@ def welcome():
 
 if __name__ == "__main__":
     create_table()
+
     
 @app.route("/create_quiz")
 def create_quiz():
@@ -93,3 +94,6 @@ def submit_quiz():
     return render_template("quiz_summary.html", quiz=questions)
 
 app.run(debug=True)
+
+
+
