@@ -28,32 +28,6 @@
 </head>
 <body>
     <!-- Your content goes here -->
-
-	<h1>Testing, Testing</h1>
-  <form method = "post" action = "/submit">
-    // The title of the document, will use this to search for specific documents 
-    <label for="docname">Document Title :</label>
-    <input type="text" id = "docname" name = "docname">
-    // The text box where the user can write their notes
-    <textarea id="myTextarea" rows="10" cols="80" name = "myTextarea"></textarea>
-    // This submit button will send the notes and the notes' title to the MongoDB database
-    <button type = "submit">Submit</button>
-  </form>
-        
-  // Allows the page to locally save and load text. May cut if unnecessary/replace with auto-save functionality if I can
-	<p>This is a paragraph. Howdy.</p>
-     <button onclick="mySave()">Save</button>
-     <button onclick="myLoad()">Load</button>
-    <script>
-     function mySave() {
-       var myContent = document.getElementById("myTextarea").value;
-       localStorage.setItem("myContent", myContent);
-     }
-     function myLoad() {
-       var myContent = localStorage.getItem("myContent");
-       document.getElementById("myTextarea").value = myContent;
-     }
-=======
 	<h1>StudyEasy Notes</h1>
   <form method = "post" action = "/submit">
     <p>Type below to name your document before saving it.</p>
