@@ -52,6 +52,7 @@
       
       const loadBtn = document.getElementById('load')
       const textArea = document.getElementById('myTextarea')
+      const docName = document.getElementById('docname')
       const nameload = document.getElementById('loadname')
 
       const baseURL = 'http://localhost:3333/trial'
@@ -75,6 +76,7 @@
         console.log(res)
         const data = await res.json()
         textArea.value = data.info
+        docName.value = data.name
       }
 
 

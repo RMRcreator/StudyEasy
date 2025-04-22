@@ -93,9 +93,10 @@ app.get('/trial:dynamic', async (req,res)=>{
     //const projection = { _id: 0, docname: 0, myTextarea: 1}
     //var textdoc = await Notes.collection.findOne({'docname' : 'Rally'}, projection)
     var testing = (testdoc.myTextarea)
+    var title = (testdoc.docname)
     console.log(testing)
     console.log(testdoc)
-    res.status(200).json({info: testing})
+    res.status(200).json({info: testing, name: title})
 })
 
 
