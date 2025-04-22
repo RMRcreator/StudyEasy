@@ -1,8 +1,9 @@
-from flask import Flask, render_template, request, jsonify, redirect, url_for
+from flask import Flask, render_template, request, jsonify, redirect, url_for, session
 from flask_bcrypt import Bcrypt
 import sqlite3
 
 app = Flask(__name__)
+app.secret_key = 'secret'
 bcrypt = Bcrypt(app)
 
 def get_db_connection():
@@ -83,17 +84,91 @@ def create_quiz():
 
 @app.route("/submit_quiz", methods=["POST"])
 def submit_quiz():
-    questions = []
-    for key in request.form:
-        if key.startswith("question"):
-            q_number = key[len("question"):]
-            a_key = "answer" + q_number
-            question = request.form.get(key)
-            answer = request.form.get(a_key)
-            questions.append((question, answer))
-    return render_template("quiz_summary.html", quiz=questions)
+    title = request.form.get('quiz_title')
+    if not title:
+        return "Quiz title is required", 400
+    
+    quiz = [];
+    i = 1
+    while True:
+        q = request.form.get(f'question{i}')
+        a = request.form.get(f'answer{i}')
+        if not q or not a:
+            break
+        quiz.append((q,a))
+        i += 1
 
+    if 'quizzes' not in session:
+        session['quizzes'] = {}
+
+    quizzes = session['quizzes']
+    quizzes[title] = quiz
+    session['quizzes'] = quizzes
+    #session['quiz_data'] = quiz
+    return render_template("quiz_summary.html", quiz=quiz)
+
+@app.route('/start_quiz/<title>')
+def start_quiz(title):
+    quizzes = session.get('quizzes', {})
+    quiz = quizzes.get(title)
+    if not quiz:
+        return "Quiz not found", 404
+
+    session['quiz_data'] = quiz
+    session['quiz_index'] = 0
+    session['quiz_score'] = 0
+    return render_template('take_quiz.html', question=quiz[0][0], total=len(quiz), current=1)
+
+
+@app.route('/take_quiz', methods=['GET'])
+def take_quiz():
+    quiz = session.get('quiz_data')
+    if not quiz:
+        return redirect(url_for('create_quiz'))
+    session['quiz_index'] = 0
+    session['quiz_score'] = 0
+    return render_template('take_quiz.html', question=quiz[0][0], total=len(quiz), current=1)
+
+@app.route('/submit_answer', methods=['POST'])
+def submit_answer():
+    user_answer = request.form.get('user_answer', '').strip().lower()
+    quiz = session.get('quiz_data', [])
+    index = session.get('quiz_index', 0)
+
+    if index >= len(quiz):
+        return redirect(url_for('dashboard'))
+
+    correct_answer = quiz[index][1].strip().lower()
+    is_correct = user_answer == correct_answer
+    session['quiz_score'] += int(is_correct)
+    session['quiz_index'] += 1
+
+    if session['quiz_index'] < len(quiz):
+        next_question = quiz[session['quiz_index']][0]
+        return render_template(
+            'take_quiz.html',
+            question=next_question,
+            total=len(quiz),
+            current=session['quiz_index'] + 1,
+            feedback="Correct!" if is_correct else f"Incorrect. The correct answer was: {correct_answer}"
+        )
+    else:
+        return render_template('take_quiz.html', completed=True, score=session['quiz_score'], total=len(quiz))
+    
+
+@app.route('/select_quiz')
+def select_quiz():
+    quizzes = session.get('quizzes', {})
+    return render_template('select_quiz.html', quizzes=quizzes)
+
+@app.route('/delete_quiz/<title>', methods=['POST'])
+def delete_quiz(title):
+    quizzes = session.get('quizzes', {})
+    if title in quizzes:
+        del quizzes[title]
+        session['quizzes'] = quizzes
+    return redirect(url_for('select_quiz'))
+
+
+    
 app.run(debug=True)
-
-
-

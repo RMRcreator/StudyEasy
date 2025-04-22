@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Select a Quiz</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='login.css') }}">
+    <style>
+        body {
+            background-color: #f0f2f5;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            font-family: Arial, sans-serif;
+        }
+        .container {
+            background: white;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 0 15px rgba(0,0,0,0.1);
+            max-width: 600px;
+            width: 100%;
+            text-align: center;
+        }
+        h1 {
+            color: #333;
+            margin-bottom: 20px;
+        }
+        ul {
+            list-style: none;
+            padding: 0;
+        }
+        li {
+            margin: 15px 0;
+        }
+        a.quiz-link {
+            display: inline-block;
+            padding: 12px 20px;
+            background-color: #4285f4;
+            color: white;
+            border-radius: 6px;
+            text-decoration: none;
+            transition: background-color 0.3s;
+        }
+        a.quiz-link:hover {
+            background-color: #3367d6;
+        }
+        .no-quizzes {
+            color: #666;
+            font-size: 14px;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <h1>Select a Quiz to Take</h1>
+    {% if quizzes %}
+    <ul>
+        {% for title in quizzes %}
+            <li style="margin-bottom: 10px;">
+                <a class="quiz-link" href="{{ url_for('start_quiz', title=title) }}">{{ title }}</a>
+                <form action="{{ url_for('delete_quiz', title=title) }}" method="post" style="display:inline;">
+                    <button type="submit" style="
+                            margin-left: 10px; padding: 4px 8px; font-size: 12px; background-color: #e74c3c; border: none; border-radius: 4px; color: white; cursor: pointer; width: auto;
+">Delete</button>
+
+                </form>
+            </li>
+        {% endfor %}
+    </ul>
+        
+        
+    {% else %}
+        <p class="no-quizzes">No quizzes found. <a href="/create_quiz">Create one?</a></p>
+    {% endif %}
+
+    <div class="actions">
+        <a href="/dashboard"><button>Go Back to Home</button></a>
+    </div>
+</div>
+</body>
+</html>

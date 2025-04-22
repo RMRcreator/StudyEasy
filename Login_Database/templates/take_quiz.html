@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Take Quiz</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='login.css') }}">
+    <style>
+        .quiz-container {
+            max-width: 500px;
+            margin: 100px auto;
+            background: #fff;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 0 15px rgba(0,0,0,0.1);
+            text-align: center;
+        }
+        input[type="text"] {
+            width: 100%;
+            padding: 12px;
+            margin: 15px 0;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+        }
+        button {
+            padding: 10px 20px;
+            background-color: #4285f4;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #3367d6;
+        }
+    </style>
+</head>
+<body>
+<div class="quiz-container">
+    {% if completed %}
+        <h1>Quiz Completed!</h1>
+        <p>Your Score: {{ score }} / {{ total }}</p>
+        <a href="/dashboard"><button>Return Home</button></a>
+    {% else %}
+        <h2>Question {{ current }} of {{ total }}</h2>
+        <p>{{ question }}</p>
+        <form method="POST" action="/submit_answer">
+            <input type="text" name="user_answer" placeholder="Type your answer here" required>
+            <button type="submit">Submit Answer</button>
+        </form>
+        {% if feedback %}
+            <p><strong>{{ feedback }}</strong></p>
+        {% endif %}
+    {% endif %}
+</div>
+</body>
+</html>
