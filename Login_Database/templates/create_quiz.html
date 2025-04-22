@@ -62,6 +62,9 @@
     <div class="container">
         <h1>Create a Practice Quiz</h1>
         <form action="/submit_quiz" method="post">
+            <label>Quiz Title:</label>
+            <input type="text" name="quiz_title" required>
+    
             <div id="quiz-container">
                 <div class="question-block">
                     <label>Question 1:</label>
@@ -77,6 +80,7 @@
             <a href="/dashboard"><button>Go Back to Home</button></a>
         </div>
     </div>
+    
 
     <script>
     let questionCount = 1;
