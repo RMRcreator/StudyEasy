@@ -32,11 +32,15 @@ app.get('/',(req,res)=>{
 //Sends the data from the page to the database onse 'submit' is pressed
 app.post('/submit',async (req,res)=>{
     const {docname, myTextarea} = req.body
+
+
     if (docname == '') {return }
+
     const notes = new Notes ({
         docname,
         myTextarea
     })
+
     const projection = { _id: 0, docname: 0, myTextarea: 1}
     var locate = await Notes.collection.findOne({'docname' : docname}, projection)
     if (locate == null) {
@@ -93,6 +97,7 @@ app.get('/trial:dynamic', async (req,res)=>{
     console.log(testdoc)
     res.status(200).json({info: testing})
 })
+
 
 
 app.listen(port,()=>{

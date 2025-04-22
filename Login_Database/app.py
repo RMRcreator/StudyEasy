@@ -75,4 +75,25 @@ def welcome():
 
 if __name__ == "__main__":
     create_table()
-    app.run(debug=True)
+
+    
+@app.route("/create_quiz")
+def create_quiz():
+    return render_template("create_quiz.html")
+
+@app.route("/submit_quiz", methods=["POST"])
+def submit_quiz():
+    questions = []
+    for key in request.form:
+        if key.startswith("question"):
+            q_number = key[len("question"):]
+            a_key = "answer" + q_number
+            question = request.form.get(key)
+            answer = request.form.get(a_key)
+            questions.append((question, answer))
+    return render_template("quiz_summary.html", quiz=questions)
+
+app.run(debug=True)
+
+
+
