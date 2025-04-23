@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Your Notes</title>
+</head>
+<body>
+    <h1>Note Taking Page</h1>
+    <form method="POST">
+        <input type="text" name="title" placeholder="Note Title" required><br>
+        <textarea name="content" placeholder="Write your note here..." rows="5" cols="50"></textarea><br>
+        <button type="submit">Save Note</button>
+    </form>
+    <h2>Your Notes:</h2>
+    {% for note in notes %}
+        <div style="border: 1px solid #000; padding: 10px; margin: 10px;">
+            <h3>{{ note['title'] }}</h3>
+            <p>{{ note['content'] }}</p>
+            <small>Created at: {{ note['created_at'] }}</small>
+        </div>
+    {% endfor %}
+</body>
+</html>
