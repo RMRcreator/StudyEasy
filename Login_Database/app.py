@@ -11,7 +11,23 @@ def get_db_connection():
     conn.row_factory = sqlite3.Row
     return conn
 
+def create_notes_table():
+    conn = get_db_connection()
+    cur = conn.cursor()
+    cur.execute("""
+    CREATE TABLE IF NOT EXISTS notes (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        username TEXT NOT NULL,
+        title TEXT NOT NULL,
+        content TEXT,
+        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    )
+    """)
+    conn.commit()
+    conn.close()
+
 def create_table():
+    create_notes_table()
     conn = get_db_connection()
     cur = conn.cursor()
     cur.execute("""
@@ -65,6 +81,7 @@ def login():
     conn.close()
 
     if user and bcrypt.check_password_hash(user[2], password):
+        session["user"] = username  # Set the user in the session
         return jsonify({"message": "Login successful", "redirect": url_for('welcome')}), 200
     else:
         return jsonify({"message": "Invalid username or password"}), 401
@@ -73,10 +90,6 @@ def login():
 @app.route("/dashboard")
 def welcome():
     return render_template("welcome.html")
-
-if __name__ == "__main__":
-    create_table()
-
     
 @app.route("/create_quiz")
 def create_quiz():
@@ -169,6 +182,27 @@ def delete_quiz(title):
         session['quizzes'] = quizzes
     return redirect(url_for('select_quiz'))
 
-
+@app.route("/notes", methods=["GET", "POST"])
+def notes():
+    if "user" not in session:
+        return redirect(url_for("home"))
     
-app.run(debug=True)
+    conn = get_db_connection()
+    cur = conn.cursor()
+
+    if request.method == "POST":
+        title = request.form["title"]
+        content = request.form["content"]
+        cur.execute("INSERT INTO notes (username, title, content) VALUES (?, ?, ?)",
+                    (session["user"], title, content))
+        conn.commit()
+
+    cur.execute("SELECT * FROM notes WHERE username = ?", (session["user"],))
+    user_notes = cur.fetchall()
+    conn.close()
+    return render_template("notes.html", notes=user_notes)
+
+if __name__ == "__main__":
+    create_table()
+    create_notes_table()
+    app.run(debug=True)

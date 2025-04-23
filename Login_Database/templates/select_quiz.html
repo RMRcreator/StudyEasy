@@ -51,64 +51,32 @@
         }
     </style>
 </head>
-
 <body>
-    <div class="container">
-        <h1>Select a Quiz to Take</h1>
-        <input type="text" id="quizSearch" placeholder="Search quizzes..." style="
-            padding: 10px;
-            width: 100%;
-            max-width: 400px;
-            margin-bottom: 20px;
-            border: 1px solid #ccc;
-            border-radius: 6px;
-            font-size: 14px;
-        ">
-    
-        {% if quizzes %}
-            <ul id="quizList">
-            {% for title in quizzes %}
-                <li style="margin-bottom: 10px;">
-                    <a class="quiz-link" href="{{ url_for('start_quiz', title=title) }}">{{ title }}</a>
-                    <form action="{{ url_for('delete_quiz', title=title) }}" method="post" style="display:inline;">
-                        <button type="submit" style="
-                            margin-left: 10px;
-                            padding: 4px 8px;
-                            font-size: 12px;
-                            background-color: #e74c3c;
-                            border: none;
-                            border-radius: 4px;
-                            color: white;
-                            cursor: pointer;
-                            width: auto;
-                            line-height: 1;
-                            white-space: nowrap;
-                        ">Delete</button>
+<div class="container">
+    <h1>Select a Quiz to Take</h1>
+    {% if quizzes %}
+    <ul>
+        {% for title in quizzes %}
+            <li style="margin-bottom: 10px;">
+                <a class="quiz-link" href="{{ url_for('start_quiz', title=title) }}">{{ title }}</a>
+                <form action="{{ url_for('delete_quiz', title=title) }}" method="post" style="display:inline;">
+                    <button type="submit" style="
+                            margin-left: 10px; padding: 4px 8px; font-size: 12px; background-color: #e74c3c; border: none; border-radius: 4px; color: white; cursor: pointer; width: auto;
+">Delete</button>
 
-                    </form>
-                </li>
-            {% endfor %}
-            </ul>
-        {% else %}
-            <p class="no-quizzes">No quizzes found. <a href="/create_quiz">Create one?</a></p>
-        {% endif %}
-    
-        <div class="actions">
-            <a href="/dashboard"><button>Go Back to Home</button></a>
-        </div>
+                </form>
+            </li>
+        {% endfor %}
+    </ul>
+        
+        
+    {% else %}
+        <p class="no-quizzes">No quizzes found. <a href="/create_quiz">Create one?</a></p>
+    {% endif %}
+
+    <div class="actions">
+        <a href="/dashboard"><button>Go Back to Home</button></a>
     </div>
-    
-    <script>
-        const searchInput = document.getElementById('quizSearch');
-        const quizItems = document.querySelectorAll('#quizList li');
-    
-        searchInput.addEventListener('input', () => {
-            const query = searchInput.value.toLowerCase();
-            quizItems.forEach(item => {
-                const title = item.querySelector('a').textContent.toLowerCase();
-                item.style.display = title.includes(query) ? 'block' : 'none';
-            });
-        });
-    </script>
-    </body>    
+</div>
+</body>
 </html>
