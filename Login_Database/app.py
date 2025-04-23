@@ -202,6 +202,7 @@ def notes():
     conn.close()
     return render_template("notes.html", notes=user_notes)
 
+
 if __name__ == "__main__":
     create_table()
     create_notes_table()
